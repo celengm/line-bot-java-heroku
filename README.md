@@ -1,5 +1,5 @@
 # LINEbot-on-heroku
-[heroku](https://www.heroku.com)上で動くLINEのbotアカウントの中身
+heroku上で動くLINEのbotアカウントの中身
 
 ## 説明
 Javaの講義の最終課題で作ったので~~パフォーマンスを犠牲にして~~Javaで書いてます。  
@@ -20,7 +20,7 @@ heroku create hoge
 でheroku上にアプリケーションを作り  
 出力されたURLを [LINE developers](https://developers.line.me/ba) のWebhook URLのところに貼る。  
 Channel Secret、Channel Access Token もコピーして  
-[これ](https://github.com/ahuglajbclajep/LINEbot-on-heroku/blob/master/src/main/java/mutuki/Receive.java)の   
+[これ](https://github.com/ahuglajbclajep/LINEbot-on-heroku/blob/master/src/main/java/mutuki/Send.java)の   
 ```
 SECRET_KEY = "Channel Secret";
 TOKEN = "Channel Access Token";
