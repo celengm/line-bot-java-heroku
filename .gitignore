@@ -1,7 +1,0 @@
-# eclipceが管理用に生成するあれこれ
-.settings/
-.classpath
-.project
-
-#　デプロイするとheroku上のMavenでコンパイルされるので
-target/
