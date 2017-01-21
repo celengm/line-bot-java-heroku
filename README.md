@@ -2,10 +2,10 @@
 heroku上で動くLINEのbotアカウントの中身
 
 ## 説明
-Javaの講義の最終課題で作ったので~~パフォーマンスを犠牲にして~~Javaで書いてます。  
-気味が悪いほどコメントあるのもそのせい。
+Javaの講義の最終課題で作ったのでJavaで書いてます。  
+~~気味が悪いほどコメントあるのもそのせい。~~
 
-*お使いの睦月は正常にゃしぃ！いひひっ！*
+![pic](https://github.com/ahuglajbclajep/LINEbot-on-heroku/blob/pic/README.gif)
 
 ## 使い方
 ### bot用のアカウントを作る
