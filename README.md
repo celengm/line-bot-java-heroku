@@ -5,7 +5,7 @@ heroku上で動くLINEのbotアカウントの中身
 Javaの講義の最終課題で作ったのでJavaで書いてます。  
 ~~気味が悪いほどコメントあるのもそのせい。~~
 
-![pic](pic/README.gif)
+![pic](https://github.com/ahuglajbclajep/LINEbot-on-heroku/blob/pic/README.gif)
 
 ## Usage
 ### Create bot account
@@ -22,9 +22,9 @@ heroku create [appname]
 *Channel Secret*、*Channel Access Token*もコピーして  
 [これ](src/main/java/mutuki/Send.java)の   
 ```java
-SECRET_KEY = "Channel Secret";
-TOKEN = "Channel Access Token";
-APP_NAME = "Webhook URL";
+private static final String SECRET_KEY = "Channel Secret";
+private static final String TOKEN = "Channel Access Token";
+private static final String APP_NAME = "Webhook URL";
 ```  
 をそれぞれ置き換える。**コンパイルは不要。**
 
