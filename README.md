@@ -5,7 +5,7 @@ heroku上で動くLINEのbotアカウントの中身
 Javaの講義の最終課題で作ったのでJavaで書いてます。  
 ~~気味が悪いほどコメントあるのもそのせい。~~
 
-![pic](https://github.com/ahuglajbclajep/LINEbot-on-heroku/blob/pic/README.gif)
+![pic](pic/README.gif)
 
 ## Usage
 ### Create bot account
@@ -20,8 +20,8 @@ heroku create [appname]
 でheroku上にアプリケーションを作り  
 出力されたURLを [LINE developers](https://developers.line.me/ba) の*Webhook URL*のところに貼る。  
 *Channel Secret*、*Channel Access Token*もコピーして  
-[これ](https://github.com/ahuglajbclajep/LINEbot-on-heroku/blob/master/src/main/java/mutuki/Send.java)の   
-```
+[これ](src/main/java/mutuki/Send.java)の   
+```java
 SECRET_KEY = "Channel Secret";
 TOKEN = "Channel Access Token";
 APP_NAME = "Webhook URL";
@@ -63,4 +63,4 @@ QRコードを生成する。他のコマンドで作ったURLを共有するの
 初めてなので拙いところは多々あると思いますが、そこも含めてプルリク&質問は大歓迎です！
 
 ## Licence
-[MIT](https://github.com/ahuglajbclajep/LINEbot-on-heroku/blob/master/LICENSE)
+[MIT](LICENSE)
