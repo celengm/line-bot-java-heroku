@@ -35,7 +35,7 @@ git push heroku master
 ```  
 でデプロイ。heroku上の[Maven](https://maven.apache.org)でコンパイルが始まる。
 
-## Examples of Command
+## Examples Of Command
 いくつか用意してみました。
 
 ### @wol [question]
@@ -59,8 +59,18 @@ QRコードを生成する。他のコマンドで作ったURLを共有するの
 
 その他画像やスタンプにも反応します。*ケッコンカッコカリは準備中。*
 
-## Pull Requests & Questions
-初めてなので拙いところは多々あると思いますが、そこも含めてプルリク&質問は大歓迎です！
+## Future Releases
+* 指定したタイムゾーンの現在時刻を返す`@time`コマンドの実装
+* [公式SDK](https://github.com/line/line-bot-sdk-java)を使う
+* [Spring Boot](https://projects.spring.io/spring-boot/)で動かす
+* *Channel Secret*、*Channel Access Token*を環境変数からとって"Deploy to Heroku"ボタンをつける
+
+## Contribution
+1. Fork it  
+2. Create your feature branch  
+3. Commit your changes  
+4. Push to the branch  
+5. Create new Pull Request
 
 ## Licence
 [MIT](LICENSE)
