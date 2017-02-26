@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +38,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
  * lineサーバーからのPOSTリクエストにPOSTリクエストを返すクラス
  * heroku上のTomcat8系サーバーでの実行を想定
  */
-// @WebServlet(name="send", urlPatterns={"/"}) // web.xmlのほかにWebServletアノテーションでもURLをマッピングできる
+@WebServlet("/callback")
 public class CallBack extends HttpServlet {
 
 	// フィールド変数 //

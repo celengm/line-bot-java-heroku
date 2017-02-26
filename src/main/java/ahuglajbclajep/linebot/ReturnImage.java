@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * GETリクエストに画像を返すクラス
  * heroku上のTomcat8系サーバーでの実行を想定
  */
+@WebServlet("/tmp/*")
 public class ReturnImage extends HttpServlet {
 
 	// メソッド //
