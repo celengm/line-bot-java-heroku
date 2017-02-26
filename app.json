@@ -1,0 +1,18 @@
+{
+  "name": "mutukibot - LINE chatbot",
+  "description": "This is a chatbot application",
+  "env": {
+    "APP_NAME": {
+      "description": "Your 'App Name'",
+      "required":  true
+    },
+    "LINE_BOT_CHANNEL_TOKEN": {
+      "description": "LINE bot Channel access token from the Channel Console",
+      "required":  true
+    },
+    "LINE_BOT_CHANNEL_SECRET": {
+      "description": "LINE bot Channel secret from the Channel Console",
+      "required":  true
+    }
+  }
+}

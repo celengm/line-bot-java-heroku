@@ -2,48 +2,36 @@
 heroku上で動くLINEのbotアカウントの中身
 
 ## Description
-Javaの講義の最終課題で作ったのでJavaで書いてます。  
-~~気味が悪いほどコメントあるのもそのせい。~~
+[これ](https://github.com/ahuglajbclajep/LINEbot-SpringBoot-on-heroku) の軽量版, [SprigBoot](https://github.com/spring-projects/spring-boot) やら [MessagingAPI](https://github.com/line/line-bot-sdk-java) がしてることを自分で実装  
+要らない機能を削ってるのでだいぶ速い
 
-![pic](https://github.com/ahuglajbclajep/LINEbot-on-heroku/blob/pic/README.gif)
+![demo](https://github.com/ahuglajbclajep/LINEbot-on-heroku/blob/pic/README.gif)
 
-## Usage
+## Install
 ### Create bot account
-[ここ](https://business.line.me/ja/services/bot)で作る。  
-細かな手順は割愛、一番面倒なとこ。
-
-### Config
-[LINE@ Manager](https://admin-official.line.me) でbotとして使うための設定を終えたら  
-```
-heroku create [appname]
-```  
-でheroku上にアプリケーションを作り  
-出力されたURLを [LINE developers](https://developers.line.me/ba) の*Webhook URL*のところに貼る。  
-*Channel Secret*、*Channel Access Token*もコピーして  
-[これ](src/main/java/mutuki/Send.java)の   
-```java
-private static final String SECRET_KEY = "Channel Secret";
-private static final String TOKEN = "Channel Access Token";
-private static final String APP_NAME = "Webhook URL";
-```  
-をそれぞれ置き換える。**コンパイルは不要。**
+[ここ](https://business.line.me/ja/services/bot)で作る   
+細かな手順は割愛、一番面倒なとこ
 
 ### Deploy to Heroku
-変更をcommitしたのち  
-```
-git push heroku master
-```  
-でデプロイ。heroku上の[Maven](https://maven.apache.org)でコンパイルが始まる。
+下のボタンを押し、[ここ](https://github.com/line/line-bot-sdk-java/blob/master/sample-spring-boot-echo/README.md)を参考に設定  
+**App Name は必ず設定すること**
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/ahuglajbclajep/LINEbot-on-heroku)
 
 ## Examples Of Command
-いくつか用意してみました。
+### @qr [string]
+```
+@qr https://github.com/ahuglajbclajep/LINEbot-on-heroku
+```
+QRコードを生成する  
+他のコマンドで作ったURLを共有するのにも使える
 
 ### @wol [question]
 ```
 @wol graph Mickey Mouse curve
 ```  
-[WolframAlpha](http://www.wolframalpha.com)で検索する。  
-計算したり天気聞いたり。
+[WolframAlpha](http://www.wolframalpha.com)で検索する  
+計算したり天気聞いたり
 
 ### @twt [keyword]
 ```
@@ -51,19 +39,11 @@ git push heroku master
 ```  
 [Twitter](https://twitter.com)を検索する。~~この機能いる？~~
 
-### @qr [string]
-```
-@qr https://github.com/ahuglajbclajep/LINEbot-on-heroku
-```  
-QRコードを生成する。他のコマンドで作ったURLを共有するのにもいい。
-
-その他画像やスタンプにも反応します。*ケッコンカッコカリは準備中。*
+その他画像やスタンプにも反応します _*ケッコンカッコカリは準備中*_
 
 ## Future Releases
 * 指定したタイムゾーンの現在時刻を返す`@time`コマンドの実装
-* [公式SDK](https://github.com/line/line-bot-sdk-java)を使う
-* [Spring Boot](https://projects.spring.io/spring-boot/)で動かす
-* *Channel Secret*、*Channel Access Token*を環境変数からとって"Deploy to Heroku"ボタンをつける
+* 発言をランダムにする
 
 ## Contribution
 1. Fork it  
