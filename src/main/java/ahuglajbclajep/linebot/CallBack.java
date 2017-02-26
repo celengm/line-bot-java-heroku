@@ -1,4 +1,4 @@
-package mutuki;
+package ahuglajbclajep.linebot;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -38,7 +38,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
  * heroku上のTomcat8系サーバーでの実行を想定
  */
 // @WebServlet(name="send", urlPatterns={"/"}) // web.xmlのほかにWebServletアノテーションでもURLをマッピングできる
-public class Send extends HttpServlet {
+public class CallBack extends HttpServlet {
 
 	// フィールド変数 //
 	private static final String SECRET_KEY = "Channel Secret";

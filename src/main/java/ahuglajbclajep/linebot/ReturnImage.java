@@ -1,4 +1,4 @@
-package mutuki;
+package ahuglajbclajep.linebot;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * GETリクエストに画像を返すクラス
  * heroku上のTomcat8系サーバーでの実行を想定
  */
-public class Receive extends HttpServlet {
+public class ReturnImage extends HttpServlet {
 
 	// メソッド //
 	/*

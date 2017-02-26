@@ -2,8 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>mutukibot</groupId>
-	<artifactId>mutuki</artifactId>
 	<packaging>war</packaging>
 	<version>1.1.0</version>
 	<properties>
@@ -11,12 +9,6 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -66,4 +58,6 @@
 		</plugins>
 		<finalName>mutuki</finalName>
 	</build>
+	<groupId>ahuglajbclajep.linebot</groupId>
+	<artifactId>mutukibot</artifactId>
 </project>
