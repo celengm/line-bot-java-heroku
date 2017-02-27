@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,20 +17,20 @@ import javax.servlet.http.HttpServletResponse;
 public class ReturnImage extends HttpServlet {
 
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+	public void doGet(HttpServletRequest req, HttpServletResponse res) {
 		byte[] image;
 		try {
-			image = Files.readAllBytes(Paths.get(request.getRequestURI()));
+			image = Files.readAllBytes(Paths.get(req.getRequestURI()));
 		}catch (InvalidPathException | IOException e) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
-		response.setContentType("image/jpeg");
-		try (ServletOutputStream stream = response.getOutputStream()) {
+		res.setContentType("image/jpeg");
+		try (ServletOutputStream stream = res.getOutputStream()) {
 			stream.write(image);
 		} catch (IOException e) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
 }

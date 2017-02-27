@@ -5,9 +5,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.EnumMap;
 import java.util.stream.Stream;
 
@@ -19,8 +21,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.net.URLCodec;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -38,34 +38,28 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 @WebServlet("/callback")
 public class CallBack extends HttpServlet {
+	private static final String APP_NAME = System.getenv("APP_NAME");
 	private static final String SECRET_KEY = System.getenv("LINE_BOT_CHANNEL_SECRET");
 	private static final String TOKEN = System.getenv("LINE_BOT_CHANNEL_TOKEN");
-	private static final String APP_NAME = System.getenv("APP_NAME");
 
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse res) {
+
 
 		// 署名検証 //
+		String sig = req.getHeader("X-Line-Signature");
 		String reqAll;
-		try (Stream<String> stream = request.getReader().lines()) {
-			String signature = request.getHeader("X-Line-Signature");  // 該当するヘッダーがないならnull
+		try (Stream<String> stream = req.getReader().lines()) {  // req全体のbyte[]が簡単にとれれば…
 			reqAll = stream.reduce((hoge, fuga) -> hoge + "\n" + fuga).orElse("");
 
-			byte[] source = reqAll.getBytes(StandardCharsets.UTF_8);
-
-			SecretKeySpec key = new SecretKeySpec(SECRET_KEY.getBytes(), "HmacSHA256");
 			Mac mac = Mac.getInstance("HmacSHA256");
-			mac.init(key);
+			mac.init(new SecretKeySpec(SECRET_KEY.getBytes(), "HmacSHA256"));
+			String csig = Base64.getEncoder().encodeToString(mac.doFinal(reqAll.getBytes(StandardCharsets.UTF_8)));
 
-			String createdSignature = Base64.encodeBase64String(mac.doFinal(source));
-
-			if (!createdSignature.equals(signature)) {  // createdSignatureは非null値
-				response.setStatus(HttpServletResponse.SC_OK);
-				return;
-			}
+			if (!csig.equals(sig)) throw(new IOException());
 
 		} catch (IOException | NullPointerException | NoSuchAlgorithmException | InvalidKeyException e) {
-			response.setStatus(HttpServletResponse.SC_OK);
+			res.setStatus(HttpServletResponse.SC_OK);
 			return;
 		}
 
@@ -73,21 +67,21 @@ public class CallBack extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode events;
 		try {
-			events = mapper.readTree(reqAll).path("events");
+			events = mapper.readTree(reqAll).path("events");  // readTreeにはbyte[]も渡せる
 		} catch (IOException e) {
-			response.setStatus(HttpServletResponse.SC_OK);
+			res.setStatus(HttpServletResponse.SC_OK);
 			return;
 		}
 
 		String replyMess;
-		if ("message".equals(events.path(0).path("type").asText())) {  // なんらかのMessageEventだったとき
+		if ("message".equals(events.path(0).path("type").asText())) {  // メッセージを受けたとき
 			replyMess = createReply(events.path(0).path("message"));
 
-		} else if ("join".equals(events.path(0).path("type").asText())){  // トークに参加したとき
+		} else if ("join".equals(events.path(0).path("type").asText())){  // トークの参加を受けたとき
 			replyMess = "\"messages\":[{\"type\":\"text\", \"text\":\"睦月、砲雷撃戦始めるよ♪\"}]";
 
 		} else {
-			response.setStatus(HttpServletResponse.SC_OK);
+			res.setStatus(HttpServletResponse.SC_OK);
 			return;
 		}
 
@@ -96,24 +90,23 @@ public class CallBack extends HttpServlet {
 		httpPost.setHeader("Content-Type", "application/json");
 		httpPost.setHeader("Authorization", "Bearer " + TOKEN);
 
-		StringBuffer strBuf = new StringBuffer("{\"replyToken\":\"")
+		StringBuffer replyBody = new StringBuffer("{\"replyToken\":\"")
 				.append(events.path(0).path("replyToken").asText())
 				.append("\",")
 				.append(replyMess)
 				.append("}");
 
-		StringEntity params = new StringEntity(strBuf.toString(), StandardCharsets.UTF_8);
-		httpPost.setEntity(params);
+		httpPost.setEntity(new StringEntity(replyBody.toString(), StandardCharsets.UTF_8));
 
 		try (CloseableHttpResponse resp = HttpClients.createDefault().execute(httpPost)) {
 		} catch (IOException e) {}
 
-		response.setStatus(HttpServletResponse.SC_OK);
+		res.setStatus(HttpServletResponse.SC_OK);
 	}
 
 
 	private String createReply(JsonNode message){
-		StringBuffer replyMess = new StringBuffer("\"messages\":[");
+		StringBuffer replyMessages = new StringBuffer("\"messages\":[");
 		String type = message.path("type").asText();
 
 		if ("text".equals(type)) {
@@ -121,72 +114,63 @@ public class CallBack extends HttpServlet {
 			args = message.path("text").asText().split(" ", 2);
 
 			if ("@qr".equals(args[0])) {
-				replyMess.append("{\"type\":\"text\",\"text\":\"")
+				replyMessages.append("{\"type\":\"text\",\"text\":\"")
 						.append("えへへ、どうぞです♪")
 						.append("\"},");
 				try {
 					String url = createQR(args[1], message.path("id").asText());  // /tmp/hoge.jpgなど
-					replyMess.append("{\"type\":\"image\",\"originalContentUrl\":\"")
-							.append("https://")
-							.append(APP_NAME)
-							.append(".herokuapp.com")
+					replyMessages.append("{\"type\":\"image\",\"originalContentUrl\":\"")
+							.append("https://").append(APP_NAME).append(".herokuapp.com")
 							.append(url)
 							.append("\",\"previewImageUrl\":\"")
-							.append("https://")
-							.append(APP_NAME)
-							.append(".herokuapp.com")
+							.append("https://").append(APP_NAME).append(".herokuapp.com")
 							.append(url);
 
 				} catch (ArrayIndexOutOfBoundsException | IOException | WriterException e) {
-					replyMess.append("{\"type\":\"text\",\"text\":\"")
+					replyMessages.append("{\"type\":\"text\",\"text\":\"")
 							.append("およ？およよ？");
 				}
 
 			} else if ("@wol".equals(args[0])) {
-				replyMess.append("{\"type\":\"text\",\"text\":\"")
+				replyMessages.append("{\"type\":\"text\",\"text\":\"")
 						.append("はい、睦月が用意するね！")
-						.append("\"},")
-						.append("{\"type\":\"text\",\"text\":\"")
+						.append("\"},").append("{\"type\":\"text\",\"text\":\"")
 						.append("http://www.wolframalpha.com");
 				try {
-					String url = new URLCodec().encode(args[1], "UTF-8");
-					replyMess.append("/input/?i=")
-							.append(url);
-
+					String url = URLEncoder.encode(args[1], "UTF-8");
+					replyMessages.append("/input/?i=").append(url);
 				} catch (ArrayIndexOutOfBoundsException | UnsupportedEncodingException e) {}
 
 			} else if("@twt".equals(args[0])) {
-				replyMess.append("{\"type\":\"text\",\"text\":\"")
+				replyMessages.append("{\"type\":\"text\",\"text\":\"")
 						.append("はい、睦月が用意するね！")
-						.append("\"},")
-						.append("{\"type\":\"text\",\"text\":\"")
+						.append("\"},").append("{\"type\":\"text\",\"text\":\"")
 						.append("https://twitter.com/search");
 
 				try {
-					String url = new URLCodec().encode(args[1], "UTF-8");
-					replyMess.append("?q=")
-							.append(url);
+					String url = URLEncoder.encode(args[1], "UTF-8");
+					replyMessages.append("?q=").append(url);
 
 				} catch (ArrayIndexOutOfBoundsException | UnsupportedEncodingException e) {
-					replyMess.append("-advanced");
+					replyMessages.append("-advanced");
 				}
 
 			} else {
-				replyMess.append("{\"type\":\"text\",\"text\":\"")
+				replyMessages.append("{\"type\":\"text\",\"text\":\"")
 						.append("にゃしぃ");
 			}
 
 		} else if ("sticker".equals(type)) {  // スタンプが送られてきたとき
-			replyMess.append("{\"type\":\"text\",\"text\":\"")
+			replyMessages.append("{\"type\":\"text\",\"text\":\"")
 					.append("なんですかなんですかぁー？");
 
 		} else if ("image".equals(type)) {  // 画像が送られてきたとき
-			replyMess.append("{\"type\":\"text\",\"text\":\"")
+			replyMessages.append("{\"type\":\"text\",\"text\":\"")
 					.append("睦月、負ける気がしないのね！");
 		}
-		replyMess.append("\"}]");
+		replyMessages.append("\"}]");
 
-		return replyMess.toString();
+		return replyMessages.toString();
 	}
 
 
@@ -198,8 +182,7 @@ public class CallBack extends HttpServlet {
 		// サイズはバージョン毎に4セル刻みで大きくなり,バージョン40で171x171, デフォルトのMARGINは上下左右4セル
 
 		BufferedImage image = MatrixToImageWriter.toBufferedImage(bitMatrix);
-		StringBuffer fileName = new StringBuffer("/tmp/");
-		fileName.append(id).append(".jpg");
+		StringBuffer fileName = new StringBuffer("/tmp/").append(id).append(".jpg");
 		ImageIO.write(image, "JPEG", new File(fileName.toString()));  // tmpフォルダ以下に出力
 
 		return fileName.toString();
