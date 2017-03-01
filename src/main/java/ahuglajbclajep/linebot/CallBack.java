@@ -11,6 +11,10 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.DateTimeException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.EnumMap;
 
@@ -123,7 +127,7 @@ public class CallBack extends HttpServlet {
 
 			if ("@qr".equals(args[0])) {
 				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("えへへ、どうぞです♪")
+						.append("よぉーし、頑張るにゃ！")
 						.append("\"},");
 				try {
 					String url = createQR(args[1], message.path("id").asText());  // /tmp/hoge.jpgなど
@@ -137,6 +141,21 @@ public class CallBack extends HttpServlet {
 				} catch (ArrayIndexOutOfBoundsException | IOException | WriterException e) {
 					replyMessages.append("{\"type\":\"text\",\"text\":\"")
 							.append("およ？およよ？");
+				}
+
+			} else if ("@time".equals(args[0])) {
+				replyMessages.append("{\"type\":\"text\",\"text\":\"")
+						.append("えへへ、どうぞです♪")
+						.append("\"},")
+						.append("{\"type\":\"text\",\"text\":\"");
+				try {
+					ZonedDateTime now = ZonedDateTime.now(ZoneId.of(args[1]));
+					replyMessages.append(now.format(DateTimeFormatter.ofPattern("MM/dd HH:mm")));
+
+				} catch (ArrayIndexOutOfBoundsException | DateTimeException e) {
+					replyMessages.append("利用可能なタイムゾーンの一覧です！")
+							.append(System.getProperty("line.separator"))
+							.append("https://git.io/vyqDP");
 				}
 
 			} else if ("@wol".equals(args[0])) {
