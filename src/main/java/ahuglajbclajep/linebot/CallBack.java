@@ -2,8 +2,10 @@ package ahuglajbclajep.linebot;
 
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -11,7 +13,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.EnumMap;
-import java.util.stream.Stream;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -48,13 +49,20 @@ public class CallBack extends HttpServlet {
 
 		// 署名検証 //
 		String sig = req.getHeader("X-Line-Signature");
-		String reqAll;
-		try (Stream<String> stream = req.getReader().lines()) {  // req全体のbyte[]が簡単にとれれば…
-			reqAll = stream.reduce((hoge, fuga) -> hoge + "\n" + fuga).orElse("");
+		byte[] reqAll;
+		try (InputStream in = req.getInputStream(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+			while (true) {
+				int i = in.read();
+				if (i == -1) {
+					reqAll = out.toByteArray();
+					break;
+				}
+				out.write(i);
+			}
 
 			Mac mac = Mac.getInstance("HmacSHA256");
 			mac.init(new SecretKeySpec(SECRET_KEY.getBytes(), "HmacSHA256"));
-			String csig = Base64.getEncoder().encodeToString(mac.doFinal(reqAll.getBytes(StandardCharsets.UTF_8)));
+			String csig = Base64.getEncoder().encodeToString(mac.doFinal(reqAll));
 
 			if (!csig.equals(sig)) throw(new IOException());
 
@@ -67,7 +75,7 @@ public class CallBack extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode events;
 		try {
-			events = mapper.readTree(reqAll).path("events");  // readTreeにはbyte[]も渡せる
+			events = mapper.readTree(reqAll).path("events");
 		} catch (IOException e) {
 			res.setStatus(HttpServletResponse.SC_OK);
 			return;
