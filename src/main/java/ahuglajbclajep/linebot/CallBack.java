@@ -115,7 +115,40 @@ public class CallBack extends HttpServlet {
 
 		res.setStatus(HttpServletResponse.SC_OK);
 	}
+	
+	private String GetData(String sVal){
+		String sTmp;
+		String sX;
+		String sY;
+		int iPos;
 
+		//https://pkget.com/?lat=25.0754447989281&lng=121.522592776661&g=2
+		iPos=sVal.indexOf("?lat=");
+		if(iPos>0) {
+		    sTmp = sVal.substring(iPos);
+		}
+		else
+		{
+		    sTmp=sVal;
+		}
+		sTmp=sTmp.replace("?lat=","");
+		sTmp=sTmp.replace("&lng=",",");
+		sTmp=sTmp.replace("&g=2","");
+
+		iPos=sTmp.indexOf(",");
+		if(iPos>0) {
+		    sX = sTmp.substring(0, iPos);
+		    sY = sTmp.substring(iPos + 1);
+		    if(sX.length()>10) {
+			sX = sX.substring(0, 10);
+		    }
+		    if(sY.length()>10) {
+			sY = sY.substring(0, 10);
+		    }
+		    sTmp = sX + ',' + sY;
+		}
+		return sTmp;
+	}	
 
 	private String createReply(JsonNode message){
 		StringBuffer replyMessages = new StringBuffer("\"messages\":[");
@@ -158,48 +191,18 @@ public class CallBack extends HttpServlet {
 							.append("https://git.io/vyqDP");
 				}
 
-			} else if ("@wol".equals(args[0])) {
-				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("はい、睦月が用意するね！")
-						.append("\"},").append("{\"type\":\"text\",\"text\":\"")
-						.append("http://www.wolframalpha.com");
-				try {
-					String url = URLEncoder.encode(args[1], "UTF-8");
-					replyMessages.append("/input/?i=").append(url);
-				} catch (ArrayIndexOutOfBoundsException | UnsupportedEncodingException e) {}
-
-			} else if("@twt".equals(args[0])) {
-				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("はい、睦月が用意するね！")
-						.append("\"},").append("{\"type\":\"text\",\"text\":\"")
-						.append("https://twitter.com/search");
-
-				try {
-					String url = URLEncoder.encode(args[1], "UTF-8");
-					replyMessages.append("?q=").append(url);
-
-				} catch (ArrayIndexOutOfBoundsException | UnsupportedEncodingException e) {
-					replyMessages.append("-advanced");
-				}
-
 			} else {
+				replyMessages=GetData(message.path("text").asText());
+				/*
 				replyMessages.append("{\"type\":\"text\",\"text\":\"")
 						.append("にゃしぃ");
+				*/
 			}
-
-		} else if ("sticker".equals(type)) {  // スタンプが送られてきたとき
-			replyMessages.append("{\"type\":\"text\",\"text\":\"")
-					.append("なんですかなんですかぁー？");
-
-		} else if ("image".equals(type)) {  // 画像が送られてきたとき
-			replyMessages.append("{\"type\":\"text\",\"text\":\"")
-					.append("睦月、負ける気がしないのね！");
 		}
 		replyMessages.append("\"}]");
 
 		return replyMessages.toString();
 	}
-
 
 	private String createQR(String arg, String id) throws WriterException, IOException {
 		EnumMap<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
