@@ -116,90 +116,12 @@ public class CallBack extends HttpServlet {
 		res.setStatus(HttpServletResponse.SC_OK);
 	}
 	
-	private String GetData(String sVal){
-		String sTmp;
-		String sX;
-		String sY;
-		int iPos;
-
-		//https://pkget.com/?lat=25.0754447989281&lng=121.522592776661&g=2
-		iPos=sVal.indexOf("?lat=");
-		if(iPos>0) {
-		    sTmp = sVal.substring(iPos);
-		}
-		else
-		{
-		    sTmp=sVal;
-		}
-		sTmp=sTmp.replace("?lat=","");
-		sTmp=sTmp.replace("&lng=",",");
-		sTmp=sTmp.replace("&g=2","");
-
-		iPos=sTmp.indexOf(",");
-		if(iPos>0) {
-		    sX = sTmp.substring(0, iPos);
-		    sY = sTmp.substring(iPos + 1);
-		    if(sX.length()>10) {
-			sX = sX.substring(0, 10);
-		    }
-		    if(sY.length()>10) {
-			sY = sY.substring(0, 10);
-		    }
-		    sTmp = sX + ',' + sY;
-		}
-		return sTmp;
-	}	
-
 	private String createReply(JsonNode message){
 		StringBuffer replyMessages = new StringBuffer("\"messages\":[");
 		String type = message.path("type").asText();
 
-		if ("text".equals(type)) {
-			String[] args;
-			args = message.path("text").asText().split(" ", 2);
-
-			if ("@qr".equals(args[0])) {
-				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("頑張ゃ！")
-						.append("\"},");
-				try {
-					String url = createQR(args[1], message.path("id").asText());  // /tmp/hoge.jpgなど
-					replyMessages.append("{\"type\":\"image\",\"originalContentUrl\":\"")
-							.append("https://").append(APP_NAME).append(".herokuapp.com")
-							.append(url)
-							.append("\",\"previewImageUrl\":\"")
-							.append("https://").append(APP_NAME).append(".herokuapp.com")
-							.append(url);
-
-				} catch (ArrayIndexOutOfBoundsException | IOException | WriterException e) {
-					replyMessages.append("{\"type\":\"text\",\"text\":\"")
-							.append("？");
-				}
-
-			} else if ("@time".equals(args[0])) {
-				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("♪")
-						.append("\"},")
-						.append("{\"type\":\"text\",\"text\":\"");
-				try {
-					ZonedDateTime now = ZonedDateTime.now(ZoneId.of(args[1]));
-					replyMessages.append(now.format(DateTimeFormatter.ofPattern("MM/dd HH:mm")));
-
-				} catch (ArrayIndexOutOfBoundsException | DateTimeException e) {					
-					replyMessages.append("！")
-							.append(System.getProperty("line.separator"))
-							.append("https://git.io/vyqDP");
-				}
-
-			} else {
-				replyMessages=GetData(message.path("text").asText());
-				/*
-				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("にゃしぃ");
-				*/
-			}
-		}
-		//replyMessages.append("\"}]");
+		replyMessages.append("！");
+		//replyMessages=GetData(message.path("text").asText());				
 
 		return replyMessages.toString();
 	}
