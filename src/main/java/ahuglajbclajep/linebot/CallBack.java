@@ -160,7 +160,7 @@ public class CallBack extends HttpServlet {
 
 			if ("@qr".equals(args[0])) {
 				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("よぉーし、頑張るにゃ！")
+						.append("頑張ゃ！")
 						.append("\"},");
 				try {
 					String url = createQR(args[1], message.path("id").asText());  // /tmp/hoge.jpgなど
@@ -173,20 +173,20 @@ public class CallBack extends HttpServlet {
 
 				} catch (ArrayIndexOutOfBoundsException | IOException | WriterException e) {
 					replyMessages.append("{\"type\":\"text\",\"text\":\"")
-							.append("およ？およよ？");
+							.append("？");
 				}
 
 			} else if ("@time".equals(args[0])) {
 				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("えへへ、どうぞです♪")
+						.append("♪")
 						.append("\"},")
 						.append("{\"type\":\"text\",\"text\":\"");
 				try {
 					ZonedDateTime now = ZonedDateTime.now(ZoneId.of(args[1]));
 					replyMessages.append(now.format(DateTimeFormatter.ofPattern("MM/dd HH:mm")));
 
-				} catch (ArrayIndexOutOfBoundsException | DateTimeException e) {
-					replyMessages.append("利用可能なタイムゾーンの一覧です！")
+				} catch (ArrayIndexOutOfBoundsException | DateTimeException e) {					
+					replyMessages.append("！")
 							.append(System.getProperty("line.separator"))
 							.append("https://git.io/vyqDP");
 				}
@@ -199,7 +199,7 @@ public class CallBack extends HttpServlet {
 				*/
 			}
 		}
-		replyMessages.append("\"}]");
+		//replyMessages.append("\"}]");
 
 		return replyMessages.toString();
 	}
