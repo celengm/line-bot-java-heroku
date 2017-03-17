@@ -194,7 +194,7 @@ public class CallBack extends HttpServlet {
 			replyMessages.append("{\"type\":\"text\",\"text\":\"")
 					.append("睦月、負ける気がしないのね！");
 		}
-		replyMessages.append("\"}]");
+		replyMessages.append("aaa\"}]");
 
 		return replyMessages.toString();
 	}
