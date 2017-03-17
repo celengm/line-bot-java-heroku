@@ -116,6 +116,40 @@ public class CallBack extends HttpServlet {
 		res.setStatus(HttpServletResponse.SC_OK);
 	}
 	
+	private String GetData(String sVal){
+		String sTmp;
+		String sX;
+		String sY;
+		int iPos;
+
+		//https://pkget.com/?lat=25.0754447989281&lng=121.522592776661&g=2
+		iPos=sVal.indexOf("?lat=");
+		if(iPos>0) {
+		    sTmp = sVal.substring(iPos);
+		}
+		else
+		{
+		    sTmp=sVal;
+		}
+		sTmp=sTmp.replace("?lat=","");
+		sTmp=sTmp.replace("&lng=",",");
+		sTmp=sTmp.replace("&g=2","");
+
+		iPos=sTmp.indexOf(",");
+		if(iPos>0) {
+		    sX = sTmp.substring(0, iPos);
+		    sY = sTmp.substring(iPos + 1);
+		    if(sX.length()>10) {
+			sX = sX.substring(0, 10);
+		    }
+		    if(sY.length()>10) {
+			sY = sY.substring(0, 10);
+		    }
+		    sTmp = sX + ',' + sY;
+		}
+		return sTmp;
+	}	
+	
 	private String createReply(JsonNode message){
 		StringBuffer replyMessages = new StringBuffer("\"messages\":[");
 		String type = message.path("type").asText();
@@ -183,7 +217,7 @@ public class CallBack extends HttpServlet {
 
 			} else {
 				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("にゃしzzzzぃ");
+						.append(GetData(args[0]));
 			}
 
 		} else if ("sticker".equals(type)) {  // スタンプが送られてきたとき
