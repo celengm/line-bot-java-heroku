@@ -183,7 +183,7 @@ public class CallBack extends HttpServlet {
 
 			} else {
 				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("にゃしぃ");
+						.append("にゃしzzzzぃ");
 			}
 
 		} else if ("sticker".equals(type)) {  // スタンプが送られてきたとき
@@ -194,7 +194,7 @@ public class CallBack extends HttpServlet {
 			replyMessages.append("{\"type\":\"text\",\"text\":\"")
 					.append("睦月、負ける気がしないのね！");
 		}
-		replyMessages.append("aaa\"}]");
+		replyMessages.append("\"}]");
 
 		return replyMessages.toString();
 	}
