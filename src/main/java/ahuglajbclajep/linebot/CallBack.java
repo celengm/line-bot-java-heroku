@@ -116,7 +116,7 @@ public class CallBack extends HttpServlet {
 		res.setStatus(HttpServletResponse.SC_OK);
 	}
 	
-private String createReply(JsonNode message){
+	private String createReply(JsonNode message){
 		StringBuffer replyMessages = new StringBuffer("\"messages\":[");
 		String type = message.path("type").asText();
 
@@ -194,7 +194,7 @@ private String createReply(JsonNode message){
 			replyMessages.append("{\"type\":\"text\",\"text\":\"")
 					.append("睦月、負ける気がしないのね！");
 		}
-		replyMessages.append("1234\"}]");
+		replyMessages.append("\"}]");
 
 		return replyMessages.toString();
 	}
