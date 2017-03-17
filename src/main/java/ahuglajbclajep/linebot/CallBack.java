@@ -116,12 +116,85 @@ public class CallBack extends HttpServlet {
 		res.setStatus(HttpServletResponse.SC_OK);
 	}
 	
-	private String createReply(JsonNode message){
+private String createReply(JsonNode message){
 		StringBuffer replyMessages = new StringBuffer("\"messages\":[");
 		String type = message.path("type").asText();
 
-		replyMessages.append("！");
-		//replyMessages=GetData(message.path("text").asText());				
+		if ("text".equals(type)) {
+			String[] args;
+			args = message.path("text").asText().split(" ", 2);
+
+			if ("@qr".equals(args[0])) {
+				replyMessages.append("{\"type\":\"text\",\"text\":\"")
+						.append("よぉーし、頑張るにゃ！")
+						.append("\"},");
+				try {
+					String url = createQR(args[1], message.path("id").asText());  // /tmp/hoge.jpgなど
+					replyMessages.append("{\"type\":\"image\",\"originalContentUrl\":\"")
+							.append("https://").append(APP_NAME).append(".herokuapp.com")
+							.append(url)
+							.append("\",\"previewImageUrl\":\"")
+							.append("https://").append(APP_NAME).append(".herokuapp.com")
+							.append(url);
+
+				} catch (ArrayIndexOutOfBoundsException | IOException | WriterException e) {
+					replyMessages.append("{\"type\":\"text\",\"text\":\"")
+							.append("およ？およよ？");
+				}
+
+			} else if ("@time".equals(args[0])) {
+				replyMessages.append("{\"type\":\"text\",\"text\":\"")
+						.append("えへへ、どうぞです♪")
+						.append("\"},")
+						.append("{\"type\":\"text\",\"text\":\"");
+				try {
+					ZonedDateTime now = ZonedDateTime.now(ZoneId.of(args[1]));
+					replyMessages.append(now.format(DateTimeFormatter.ofPattern("MM/dd HH:mm")));
+
+				} catch (ArrayIndexOutOfBoundsException | DateTimeException e) {
+					replyMessages.append("利用可能なタイムゾーンの一覧です！")
+							.append(System.getProperty("line.separator"))
+							.append("https://git.io/vyqDP");
+				}
+
+			} else if ("@wol".equals(args[0])) {
+				replyMessages.append("{\"type\":\"text\",\"text\":\"")
+						.append("はい、睦月が用意するね！")
+						.append("\"},").append("{\"type\":\"text\",\"text\":\"")
+						.append("http://www.wolframalpha.com");
+				try {
+					String url = URLEncoder.encode(args[1], "UTF-8");
+					replyMessages.append("/input/?i=").append(url);
+				} catch (ArrayIndexOutOfBoundsException | UnsupportedEncodingException e) {}
+
+			} else if("@twt".equals(args[0])) {
+				replyMessages.append("{\"type\":\"text\",\"text\":\"")
+						.append("はい、睦月が用意するね！")
+						.append("\"},").append("{\"type\":\"text\",\"text\":\"")
+						.append("https://twitter.com/search");
+
+				try {
+					String url = URLEncoder.encode(args[1], "UTF-8");
+					replyMessages.append("?q=").append(url);
+
+				} catch (ArrayIndexOutOfBoundsException | UnsupportedEncodingException e) {
+					replyMessages.append("-advanced");
+				}
+
+			} else {
+				replyMessages.append("{\"type\":\"text\",\"text\":\"")
+						.append("にゃしぃ");
+			}
+
+		} else if ("sticker".equals(type)) {  // スタンプが送られてきたとき
+			replyMessages.append("{\"type\":\"text\",\"text\":\"")
+					.append("なんですかなんですかぁー？");
+
+		} else if ("image".equals(type)) {  // 画像が送られてきたとき
+			replyMessages.append("{\"type\":\"text\",\"text\":\"")
+					.append("睦月、負ける気がしないのね！");
+		}
+		replyMessages.append("1234\"}]");
 
 		return replyMessages.toString();
 	}
