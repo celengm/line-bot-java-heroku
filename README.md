@@ -16,7 +16,7 @@ heroku上で動くLINEのbotアカウントの中身
 下のボタンを押し、[ここ](https://github.com/line/line-bot-sdk-java/blob/master/sample-spring-boot-echo/README.md)を参考に設定  
 **App Name は必ず設定すること**
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/ahuglajbclajep/LINEbot-on-heroku)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/benson88/line-bot-java-heroku)
 
 ## Examples Of Command
 ### @qr [string]
