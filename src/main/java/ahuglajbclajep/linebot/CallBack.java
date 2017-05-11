@@ -130,7 +130,7 @@ public class CallBack extends HttpServlet {
 		else
 		{
 		    //sTmp=sVal;
-		    sTmp="!!!e";
+		    sTmp="!!!f";
 		}
 		sTmp=sTmp.replace("lat=","");
 		sTmp=sTmp.replace("&lng=",",");
@@ -155,11 +155,15 @@ public class CallBack extends HttpServlet {
 	private String createReply(JsonNode message){
 		StringBuffer replyMessages = new StringBuffer("\"messages\":[");
 		String type = message.path("type").asText();
+		String sTmp;
 
 		if ("text".equals(type)) {
 			String[] args;
-			args = message.path("text").asText().split("#", 2);
+			//args = message.path("text").asText().split("#", 2);
+			sTmp=message.path("text").asText().replace(" ","");
+			args = sTmp.split(" ", 2);
 			//args = message.path("text").asText().split(" ", 2);
+			
 
 			if ("@qr".equals(args[0])) {
 				replyMessages.append("{\"type\":\"text\",\"text\":\"")
