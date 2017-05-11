@@ -123,7 +123,7 @@ public class CallBack extends HttpServlet {
 		int iPos;
 
 		//https://pkget.com/?lat=25.0754447989281&lng=121.522592776661&g=2
-		iPos=sVal.indexOf("?lat=");
+		iPos=sVal.indexOf("lat=");
 		if(iPos>0) {
 		    sTmp = sVal.substring(iPos);
 		}
@@ -131,8 +131,9 @@ public class CallBack extends HttpServlet {
 		{
 		    sTmp=sVal;
 		}
-		sTmp=sTmp.replace("?lat=","");
+		sTmp=sTmp.replace("lat=","");
 		sTmp=sTmp.replace("&lng=",",");
+		sTmp=sTmp.replace("&g=1","");
 		sTmp=sTmp.replace("&g=2","");
 
 		iPos=sTmp.indexOf(",");
