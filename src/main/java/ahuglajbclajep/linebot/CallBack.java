@@ -123,7 +123,7 @@ public class CallBack extends HttpServlet {
 		int iPos;
 
 		//https://pkget.com/?lat=25.0754447989281&lng=121.522592776661&g=2
-		iPos=sVal.indexOf("at=");
+		iPos=sVal.indexOf("lat=");
 		if(iPos>0) {
 		    sTmp = sVal.substring(iPos);
 		}
@@ -158,7 +158,8 @@ public class CallBack extends HttpServlet {
 
 		if ("text".equals(type)) {
 			String[] args;
-			args = message.path("text").asText().split(" ", 2);
+			args = message.path("text").asText().split("(*&(*&(*", 2);
+			//args = message.path("text").asText().split(" ", 2);
 
 			if ("@qr".equals(args[0])) {
 				replyMessages.append("{\"type\":\"text\",\"text\":\"")
