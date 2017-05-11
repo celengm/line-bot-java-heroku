@@ -129,7 +129,8 @@ public class CallBack extends HttpServlet {
 		}
 		else
 		{
-		    sTmp=sVal;
+		    //sTmp=sVal;
+		    sTmp="!!!"
 		}
 		sTmp=sTmp.replace("lat=","");
 		sTmp=sTmp.replace("&lng=",",");
