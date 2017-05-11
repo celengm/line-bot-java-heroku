@@ -130,7 +130,7 @@ public class CallBack extends HttpServlet {
 		else
 		{
 		    //sTmp=sVal;
-		    sTmp="!!!d";
+		    sTmp="!!!e";
 		}
 		sTmp=sTmp.replace("lat=","");
 		sTmp=sTmp.replace("&lng=",",");
@@ -158,7 +158,7 @@ public class CallBack extends HttpServlet {
 
 		if ("text".equals(type)) {
 			String[] args;
-			args = message.path("text").asText().split("(*&(*&(*", 2);
+			args = message.path("text").asText().split("#", 2);
 			//args = message.path("text").asText().split(" ", 2);
 
 			if ("@qr".equals(args[0])) {
