@@ -126,28 +126,29 @@ public class CallBack extends HttpServlet {
 		iPos=sVal.indexOf("lat=");
 		if(iPos>0) {
 		    sTmp = sVal.substring(iPos);
+		    sTmp=sTmp.replace("lat=","");
+		    sTmp=sTmp.replace("&lng=",",");
+		    sTmp=sTmp.replace("&g=1","");
+		    sTmp=sTmp.replace("&g=2","");
+
+		    iPos=sTmp.indexOf(",");
+		    if(iPos>0) {
+		        sX = sTmp.substring(0, iPos);
+		        sY = sTmp.substring(iPos + 1);
+		        if(sX.length()>10) {
+	 	    	    sX = sX.substring(0, 10);
+		        }
+			if(sY.length()>10) {
+		            sY = sY.substring(0, 10);
+			    }
+			    sTmp = sX + ',' + sY;
+			}			
 		}
 		else
 		{
+			sTmp="magnet:?xt=urn:btih:" + sVal;
 		    //sTmp=sVal;
-		    sTmp="!!!f";
-		}
-		sTmp=sTmp.replace("lat=","");
-		sTmp=sTmp.replace("&lng=",",");
-		sTmp=sTmp.replace("&g=1","");
-		sTmp=sTmp.replace("&g=2","");
-
-		iPos=sTmp.indexOf(",");
-		if(iPos>0) {
-		    sX = sTmp.substring(0, iPos);
-		    sY = sTmp.substring(iPos + 1);
-		    if(sX.length()>10) {
-			sX = sX.substring(0, 10);
-		    }
-		    if(sY.length()>10) {
-			sY = sY.substring(0, 10);
-		    }
-		    sTmp = sX + ',' + sY;
+		    //sTmp="!!!f";
 		}
 		return sTmp;
 	}	
