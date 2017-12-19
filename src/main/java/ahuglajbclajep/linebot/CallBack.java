@@ -44,8 +44,8 @@ import com.google.zxing.qrcode.QRCodeWriter;
 @WebServlet("/callback")
 public class CallBack extends HttpServlet {
 	private static final String APP_NAME = System.getenv("APP_NAME");
-	private static final String SECRET_KEY = System.getenv("LINE_BOT_CHANNEL_SECRET");
-	private static final String TOKEN = System.getenv("LINE_BOT_CHANNEL_TOKEN");
+	private static final String SECRET_KEY = System.getenv("f43ae5e01e836c209010771daea3da20");
+	private static final String TOKEN = System.getenv("1cNQYh8lyQ1tefxENtiMug1Do9CLdfXvHKFBhbJ3usgKxJol6ab2Xjho1EPJ8zyefMB0XQCN+QcqGhljRKdihkupgfP9qm9vs4+wmZRr/geSZfQG4f+/M/MTSTSsqJKMI4c95+Trpy/wivfCxN0CnAdB04t89/1O/w1cDnyilFU=");
 
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) {
