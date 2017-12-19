@@ -86,11 +86,11 @@ public class CallBack extends HttpServlet {
 		}
 
 		String replyMess;
-		if ("message".equals(events.path(0).path("type").asText())) {  // メッセージを受けたとき
+		if ("message".equals(events.path(0).path("type").asText())) {  // apakah anda gila?
 			replyMess = createReply(events.path(0).path("message"));
 
 		} else if ("join".equals(events.path(0).path("type").asText())){  // トークの参加を受けたとき
-			replyMess = "\"messages\":[{\"type\":\"text\", \"text\":\"睦月、砲雷撃戦始めるよ♪\"}]";
+			replyMess = "\"messages\":[{\"type\":\"text\", \"text\":\"menjembutkan";
 
 		} else {
 			res.setStatus(HttpServletResponse.SC_OK);
@@ -168,7 +168,7 @@ public class CallBack extends HttpServlet {
 
 			if ("@qr".equals(args[0])) {
 				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("よぉーし、頑張るにゃ！")
+						.append("eror ka")
 						.append("\"},");
 				try {
 					String url = createQR(args[1], message.path("id").asText());  // /tmp/hoge.jpgなど
@@ -181,12 +181,12 @@ public class CallBack extends HttpServlet {
 
 				} catch (ArrayIndexOutOfBoundsException | IOException | WriterException e) {
 					replyMessages.append("{\"type\":\"text\",\"text\":\"")
-							.append("およ？およよ？");
+							.append("anda kurang beruntung");
 				}
 
 			} else if ("@time".equals(args[0])) {
 				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("えへへ、どうぞです♪")
+						.append("loading....")
 						.append("\"},")
 						.append("{\"type\":\"text\",\"text\":\"");
 				try {
@@ -194,14 +194,14 @@ public class CallBack extends HttpServlet {
 					replyMessages.append(now.format(DateTimeFormatter.ofPattern("MM/dd HH:mm")));
 
 				} catch (ArrayIndexOutOfBoundsException | DateTimeException e) {
-					replyMessages.append("利用可能なタイムゾーンの一覧です！")
+					replyMessages.append("done")
 							.append(System.getProperty("line.separator"))
 							.append("https://git.io/vyqDP");
 				}
 
 			} else if ("@wol".equals(args[0])) {
 				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("はい、睦月が用意するね！")
+						.append("yup halo")
 						.append("\"},").append("{\"type\":\"text\",\"text\":\"")
 						.append("http://www.wolframalpha.com");
 				try {
@@ -211,7 +211,7 @@ public class CallBack extends HttpServlet {
 
 			} else if("@twt".equals(args[0])) {
 				replyMessages.append("{\"type\":\"text\",\"text\":\"")
-						.append("はい、睦月が用意するね！")
+						.append("wait..")
 						.append("\"},").append("{\"type\":\"text\",\"text\":\"")
 						.append("https://twitter.com/search");
 
@@ -230,11 +230,11 @@ public class CallBack extends HttpServlet {
 
 		} else if ("sticker".equals(type)) {  // スタンプが送られてきたとき
 			replyMessages.append("{\"type\":\"text\",\"text\":\"")
-					.append("なんですかなんですかぁー？");
+					.append("makasih tikelnya？");
 
 		} else if ("image".equals(type)) {  // 画像が送られてきたとき
 			replyMessages.append("{\"type\":\"text\",\"text\":\"")
-					.append("睦月、負ける気がしないのね！");
+					.append("wow...kece！");
 		}
 		replyMessages.append("\"}]");
 
